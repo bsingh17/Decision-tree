@@ -1,0 +1,65 @@
+import numpy as np
+import pandas as pd
+
+dataset=pd.read_csv('mushrooms.csv')
+dataset[dataset.isnull().any(axis=1)]
+inputs=dataset.drop('class',axis='columns')
+
+from sklearn.preprocessing import LabelEncoder
+lbl_class=LabelEncoder()
+lbl_capshape=LabelEncoder()
+lbl_capsurface=LabelEncoder()
+lbl_capcolor=LabelEncoder()
+lbl_bruises=LabelEncoder()
+lbl_odor=LabelEncoder()
+lbl_gillattachment=LabelEncoder()
+lbl_gillspacing=LabelEncoder()
+lbl_gillsize=LabelEncoder()
+lbl_gillcolor=LabelEncoder()
+lbl_stalkshape=LabelEncoder()
+lbl_stalkroot=LabelEncoder()
+lbl_ksurfaceabove=LabelEncoder()
+lbl_ksurfacebelow=LabelEncoder()
+lbl_stalkcolorabove=LabelEncoder()
+lbl_stalkcolorbelow=LabelEncoder()
+lbl_veiltype=LabelEncoder()
+lbl_veilcolor=LabelEncoder()
+lbl_ringnumber=LabelEncoder()
+lbl_ringtype=LabelEncoder()
+lbl_sporeprintcolor=LabelEncoder()
+lbl_population=LabelEncoder()
+lbl_habitat=LabelEncoder()
+
+inputs['cap-shape']=lbl_capshape.fit_transform(dataset['cap-shape'])
+inputs['cap-surface']=lbl_capsurface.fit_transform(dataset['cap-surface'])
+inputs['cap-color']=lbl_capcolor.fit_transform(dataset['cap-color'])
+inputs['bruises']=lbl_bruises.fit_transform(dataset['bruises'])
+inputs['odor']=lbl_odor.fit_transform(dataset['odor'])
+inputs['gill-attachment']=lbl_gillattachment.fit_transform(dataset['gill-attachment'])
+inputs['gill-spacing']=lbl_gillspacing.fit_transform(dataset['gill-spacing'])
+inputs['gill-size']=lbl_gillsize.fit_transform(dataset['gill-size'])
+inputs['gill-color']=lbl_gillcolor.fit_transform(dataset['gill-color'])
+inputs['stalk-shape']=lbl_stalkshape.fit_transform(dataset['stalk-shape'])
+inputs['stalk-root']=lbl_stalkroot.fit_transform(dataset['stalk-root'])
+inputs['stalk-surface-above-ring']=lbl_ksurfaceabove.fit_transform(dataset['stalk-surface-above-ring'])
+inputs['stalk-surface-below-ring']=lbl_ksurfacebelow.fit_transform(dataset['stalk-surface-below-ring'])
+inputs['stalk-color-above-ring']=lbl_stalkcolorabove.fit_transform(dataset['stalk-color-above-ring'])
+inputs['stalk-color-below-ring']=lbl_stalkcolorbelow.fit_transform(dataset['stalk-color-below-ring'])
+inputs['veil-type']=lbl_veiltype.fit_transform(dataset['veil-type'])
+inputs['veil-color']=lbl_veilcolor.fit_transform(dataset['veil-color'])
+inputs['ring-number']=lbl_ringnumber.fit_transform(dataset['ring-number'])
+inputs['ring-type']=lbl_ringtype.fit_transform(dataset['ring-type'])
+inputs['spore-print-color']=lbl_sporeprintcolor.fit_transform(dataset['spore-print-color'])
+inputs['population']=lbl_population.fit_transform(dataset['population'])
+inputs['habitat']=lbl_habitat.fit_transform(dataset['habitat'])
+dataset['class']=lbl_class.fit_transform(dataset['class'])
+target=dataset['class']
+from sklearn.model_selection import train_test_split
+inputs_train,inputs_test,target_train,target_test=train_test_split(inputs,target,test_size=0.3)
+
+from sklearn import tree
+model=tree.DecisionTreeClassifier()
+model.fit(inputs_train,target_train)
+target_predict=model.predict(inputs_test)
+
+print(model.score(inputs_test,target_test))
